@@ -1,0 +1,6 @@
+*.log
+*.int
+*.rsc
+*.dmb
+*.lk
+/players/*

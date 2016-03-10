@@ -2718,7 +2718,7 @@
 	var/t1 = input(user, "Please select a color:", "Locking Computer", null) in list( "red", "blue", "green", "yellow", "black", "white", "neutral" )
 	if ((user.equipped() != src || user.stat || user.restrained()))
 		return
-	src.color = t1
+	src.icon_color = t1
 	src.icon_state = text("paint_[]", t1)
 	add_fingerprint(user)
 	return
@@ -2797,7 +2797,7 @@
 	else
 		if (istype(P, /obj/item/weapon/paint))
 			var/obj/item/weapon/paint/C = P
-			src.icon_state = text("flag_[]", C.color)
+			src.icon_state = text("flag_[]", C.icon_color)
 			if (ctf)
 				ctf.check_win()
 		else
@@ -4488,7 +4488,7 @@
 /obj/item/weapon/implantcase/proc/update()
 
 	if (src.imp)
-		src.icon_state = text("implantcase-[]", src.imp.color)
+		src.icon_state = text("implantcase-[]", src.imp.icon_color)
 	else
 		src.icon_state = "implantcase-0"
 	return

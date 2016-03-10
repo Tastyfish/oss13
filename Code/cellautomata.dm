@@ -11,29 +11,29 @@
 			I.engine_access = 5
 			I.air_access = 5
 			I.assignment = "Captain"
-			I.registered = text("[]", uppertext((src.color ? src.color : "rogue")))
+			I.registered = text("[]", uppertext((src.icon_color ? src.icon_color : "rogue")))
 			I.name = text("[]'s ID Card ([]>[]-[]-[])", I.registered, I.access_level, I.lab_access, I.engine_access, I.air_access)
 			var/obj/item/weapon/paper/flag/F = new /obj/item/weapon/paper/flag( L.loc )
-			if (src.color)
-				F.icon_state = text("flag_[]", src.color)
-				F.name = text("flag- '[] Team's Flag'", uppertext(src.color))
+			if (src.icon_color)
+				F.icon_state = text("flag_[]", src.icon_color)
+				F.name = text("flag- '[] Team's Flag'", uppertext(src.icon_color))
 			else
 				F.name = "flag- 'NEUTRAL Team's Flag'"
 				F.icon_state = "flag_neutral"
-			F.info = text("This is an authentic [] flag!\n<font face=vivaldi>Capture the Flag</font>", (src.color ? src.color : "neutral"))
+			F.info = text("This is an authentic [] flag!\n<font face=vivaldi>Capture the Flag</font>", (src.icon_color ? src.icon_color : "neutral"))
 			if (src.master.paint_cans)
 				var/obj/item/weapon/paint/P = new /obj/item/weapon/paint( L.loc )
-				if (src.color)
-					P.color = src.color
-					P.icon_state = text("paint_[]", src.color)
+				if (src.icon_color)
+					P.icon_color = src.icon_color
+					P.icon_state = text("paint_[]", src.icon_color)
 				else
-					P.color = "neutral"
-					P.icon_state = text("paint_[]", src.color)
+					P.icon_color = "neutral"
+					P.icon_state = text("paint_[]", src.icon_color)
 			//L = null
 			del(L)
 		while(locate(text("landmark*CTF-wardrobe-[]", src.base)))
 			var/obj/L = locate(text("landmark*CTF-wardrobe-[]", src.base))
-			switch(src.color)
+			switch(src.icon_color)
 				if("blue")
 					new /obj/closet/wardrobe( L.loc )
 				if("green")
@@ -52,12 +52,12 @@
 		if (starting)
 			for(var/mob/human/H in src.members)
 				H.loc = starting.loc
-				if ((src.master.autodress && src.color))
+				if ((src.master.autodress && src.icon_color))
 					H.w_uniform = null
 					del(H.w_uniform)
 					H.shoes = null
 					del(H.shoes)
-					switch(src.color)
+					switch(src.icon_color)
 						if("blue")
 							H.w_uniform = new /obj/item/weapon/clothing/under/blue( H )
 							H.shoes = new /obj/item/weapon/clothing/shoes/brown( H )
@@ -94,7 +94,7 @@
 	for(var/mob/M in src.members)
 		dat += text("\t[] ([])\n", M.rname, M.key)
 		//Foreach goto(79)
-	dat += text("Base: \t<A href='?src=\ref[];base=1'>[]</A>\nColor: \t<A href='?src=\ref[];color=1'>[]</A>\n\n<A href='?src=\ref[];nothing=1'>Refresh</A>", src, src.base, src, src.color, src)
+	dat += text("Base: \t<A href='?src=\ref[];base=1'>[]</A>\nColor: \t<A href='?src=\ref[];color=1'>[]</A>\n\n<A href='?src=\ref[];nothing=1'>Refresh</A>", src, src.base, src, src.icon_color, src)
 	dat += "</PRE>"
 	user << browse(dat, "window=ctf_team")
 	return
@@ -108,8 +108,8 @@
 			var/t = input(usr, "Please select a new color", null, null)  as null|anything in src.master.avail_colors
 			if ((t && src.master.avail_colors.Find(t)))
 				src.master.avail_colors -= t
-				src.master.avail_colors += src.color
-				src.color = t
+				src.master.avail_colors += src.icon_color
+				src.icon_color = t
 		if (href_list["base"])
 			var/t = input(usr, "Please select a new base", null, null)  as null|anything in src.master.avail_bases
 			if ((t && src.master.avail_bases.Find(t)))
@@ -253,13 +253,13 @@
 		return
 	var/obj/team/winner = null
 	for(var/obj/team/T in src)
-		if (text("flag_[]", T.color) == text("[]", F.icon_state))
+		if (text("flag_[]", T.icon_color) == text("[]", F.icon_state))
 			winner = T
 		else
 			//Foreach continue //goto(157)
 	if (winner)
 		world << "<H3><B>The game has been won!!!</B></H3>"
-		world << text("<B>Team: [] Team led by [] in []</B>", uppertext(winner.color), winner.captain, winner.base)
+		world << text("<B>Team: [] Team led by [] in []</B>", uppertext(winner.icon_color), winner.captain, winner.base)
 		world << "<B>Original Members:</B>"
 		for(var/mob/human/H in winner.members)
 			if (H.client)
@@ -273,13 +273,13 @@
 	dat += text("Players (per Team): <A href='?src=\ref[];play_team=1'>[]</A>\nBarrier Time: <A href='?src=\ref[];barriertime=1'>[] minutes</A>\n\n<B>Teams:</B>\n", src, src.play_team, src, src.barriertime)
 	for(var/obj/team/O in src)
 		if (ismob(O.captain))
-			if (O.color)
-				dat += text("\t<A href='?src=\ref[];team=\ref[]'>[]'s Team ([])</A>\n", src, O, O.captain, O.color)
+			if (O.icon_color)
+				dat += text("\t<A href='?src=\ref[];team=\ref[]'>[]'s Team ([])</A>\n", src, O, O.captain, O.icon_color)
 			else
 				dat += text("\t<A href='?src=\ref[];team=\ref[]'>[]'s Team</A>\n", src, O, O.captain)
 		else
-			if (O.color)
-				dat += text("\t<A href='?src=\ref[];team=\ref[]'>[] Team</A>\n", src, O, O.color)
+			if (O.icon_color)
+				dat += text("\t<A href='?src=\ref[];team=\ref[]'>[] Team</A>\n", src, O, O.icon_color)
 			else
 				dat += text("\t<A href='?src=\ref[];team=\ref[]'>No Captain</A>\n", src, O)
 		//Foreach goto(43)
@@ -334,9 +334,9 @@
 			var/obj/team/T = new /obj/team( src )
 			T.master = src
 			T.base = pick(src.avail_bases)
-			T.color = pick(src.avail_colors)
+			T.icon_color = pick(src.avail_colors)
 			src.avail_bases -= T.base
-			src.avail_colors -= T.color
+			src.avail_colors -= T.icon_color
 	if (href_list["select_team"])
 		if (!( src.picking ))
 			src.picking = 1
